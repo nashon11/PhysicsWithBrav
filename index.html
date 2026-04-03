@@ -502,8 +502,43 @@ input:focus {
         <div class="fee-amount">KSh 2,000</div>
       </div>
 
+      <!-- Till Number Payment Instructions -->
+      <div style="background:rgba(255,215,0,0.04);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,215,0,0.14);border-radius:12px;padding:18px;margin-bottom:16px;position:relative;overflow:hidden;">
+        <div style="position:absolute;top:0;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,rgba(255,215,0,0.4),transparent);"></div>
+        <div style="font-size:10px;letter-spacing:2px;color:#C9A84C;text-transform:uppercase;margin-bottom:12px;">How to Pay via M-Pesa</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:#aaa;">
+            <span style="color:#FFD700;font-weight:700;min-width:18px;">1.</span>
+            <span>Go to <strong style="color:#fff;">M-Pesa</strong> → Lipa na M-Pesa → Buy Goods & Services</span>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:#aaa;">
+            <span style="color:#FFD700;font-weight:700;min-width:18px;">2.</span>
+            <span>Enter Till Number: <strong style="color:#FFD700;font-size:15px;letter-spacing:2px;">3171534</strong></span>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:#aaa;">
+            <span style="color:#FFD700;font-weight:700;min-width:18px;">3.</span>
+            <span>Enter amount: <strong style="color:#fff;">KSh 2,000</strong></span>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:#aaa;">
+            <span style="color:#FFD700;font-weight:700;min-width:18px;">4.</span>
+            <span>Enter your M-Pesa PIN and confirm</span>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:#aaa;">
+            <span style="color:#FFD700;font-weight:700;min-width:18px;">5.</span>
+            <span>Take a screenshot of the confirmation SMS and upload it below</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Screenshot Upload -->
+      <div class="form-group" style="animation-delay:0.45s;">
+        <label>M-Pesa Confirmation Screenshot</label>
+        <input type="file" id="screenshot" accept="image/*" style="padding:10px 16px;font-size:13px;cursor:pointer;" />
+        <div class="input-hint">Upload your M-Pesa SMS screenshot to confirm payment</div>
+      </div>
+
       <button class="btn" onclick="handleSubmit()">
-        Register &amp; Pay via M-Pesa
+        Complete Registration
       </button>
 
       <div class="secure-note">
@@ -511,14 +546,14 @@ input:focus {
           <rect x="3" y="11" width="18" height="11" rx="2"/>
           <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
         </svg>
-        Secured · Instant Slack access after payment
+        Secured · Slack invite sent once payment is confirmed
       </div>
     </div>
 
     <div class="success-screen" id="successScreen">
       <div class="success-icon">✓</div>
-      <h3>You're registered!</h3>
-      <p>Check your phone for the M-Pesa prompt. Once payment is confirmed your Slack invite will be sent to your email instantly.</p>
+      <h3>Registration received!</h3>
+      <p>Thank you! Once your M-Pesa payment is verified your Slack invite will be sent to your email within minutes. Welcome to The Physics Lab! 🔥</p>
     </div>
   </div>
 
@@ -529,9 +564,11 @@ function handleSubmit() {
   const name  = document.getElementById('name').value.trim();
   const phone = document.getElementById('phone').value.trim();
   const email = document.getElementById('email').value.trim();
+  const screenshot = document.getElementById('screenshot').files[0];
   if (!name || !phone || !email) { alert('Please fill in all fields to continue.'); return; }
   if (!/^07\d{8}$/.test(phone)) { alert('Please enter a valid Safaricom number e.g. 0712345678'); return; }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { alert('Please enter a valid email address.'); return; }
+  if (!screenshot) { alert('Please upload your M-Pesa confirmation screenshot to complete registration.'); return; }
   document.getElementById('formWrap').style.display = 'none';
   document.getElementById('successScreen').style.display = 'block';
 }
