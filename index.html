@@ -533,15 +533,8 @@ input:focus {
         </div>
       </div>
 
-      <!-- Screenshot Upload -->
-      <div class="form-group" style="animation-delay:0.45s;">
-        <label>M-Pesa Confirmation Screenshot</label>
-        <input type="file" id="screenshot" accept="image/*" style="padding:10px 16px;font-size:13px;cursor:pointer;" />
-        <div class="input-hint">Upload your M-Pesa SMS screenshot to confirm payment</div>
-      </div>
-
       <button class="btn" onclick="handleSubmit()">
-        Complete Registration
+        Proceed to Registration Form
       </button>
 
       <div class="secure-note">
@@ -567,11 +560,10 @@ function handleSubmit() {
   const name  = document.getElementById('name').value.trim();
   const phone = document.getElementById('phone').value.trim();
   const email = document.getElementById('email').value.trim();
-  const screenshot = document.getElementById('screenshot').files[0];
   if (!name || !phone || !email) { alert('Please fill in all fields to continue.'); return; }
   if (!/^07\d{8}$/.test(phone)) { alert('Please enter a valid Safaricom number e.g. 0712345678'); return; }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { alert('Please enter a valid email address.'); return; }
-  if (!screenshot) { alert('Please upload your M-Pesa confirmation screenshot to complete registration.'); return; }
+  window.open('https://docs.google.com/forms/d/e/1FAIpQLScK4PT3X-L5olSMxPbPAlMIhecRanmsSn_dwpkET9EIpfEhcg/viewform', '_blank');
   document.getElementById('formWrap').style.display = 'none';
   document.getElementById('successScreen').style.display = 'block';
 }
