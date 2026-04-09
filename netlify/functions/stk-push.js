@@ -15,7 +15,8 @@ exports.handler = async (event) => {
       email: email,
       first_name: name.split(' ')[0],
       last_name: name.split(' ')[1] || '',
-      narrative: 'Physics Lab Tuition - ' + name
+      narrative: 'Physics Lab Tuition - ' + name,
+      callback_url:'https://webhook.site/b5ad4668-d057-443b-889e-833d56575797'
     })
   });
 
