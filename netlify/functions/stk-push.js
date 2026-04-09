@@ -13,6 +13,8 @@ exports.handler = async (event) => {
       amount: 2000,
       phone_number: phone,
       email: email,
+      first_name: name.split(' ')[0],
+      last_name: name.split(' ')[1] || '',
       narrative: 'Physics Lab Tuition - ' + name
     })
   });
@@ -21,6 +23,7 @@ exports.handler = async (event) => {
 
   return {
     statusCode: response.ok ? 200 : 400,
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
   };
 };
