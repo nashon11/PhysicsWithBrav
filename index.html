@@ -435,7 +435,7 @@ input:focus {
     </div>
 
     <div class="left-main">
-      <div class="school-name">Physics Academy</div>
+      <div class="school-name">Wesonga Physics Academy</div>
       <h1>The Physics <span>Lab with Brav</span></h1>
       <p class="tagline">Master Form 3 Physics in 10 intensive days. Pay once, get instant Slack access and daily live Google Meet sessions.</p>
       <div style="display:inline-block;margin-bottom:8px;padding:8px 20px;border-left:2px solid var(--gold);background:rgba(255,215,0,0.04);border-radius:0 8px 8px 0;backdrop-filter:blur(10px);">
@@ -467,7 +467,7 @@ input:focus {
     </div>
 
     <div class="left-footer">
-      © 2025 <span>Physics Academy</span> · All rights reserved
+      © 2025 <span>Wesonga Physics Academy</span> · All rights reserved
     </div>
   </div>
 
@@ -505,67 +505,85 @@ input:focus {
         <div class="fee-amount">KSh 2,000</div>
       </div>
 
-      <!-- Till Number Payment Instructions -->
-      <div style="background:rgba(255,215,0,0.04);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,215,0,0.14);border-radius:12px;padding:18px;margin-bottom:16px;position:relative;overflow:hidden;">
-        <div style="position:absolute;top:0;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,rgba(255,215,0,0.4),transparent);"></div>
-        <div style="font-size:10px;letter-spacing:2px;color:#C9A84C;text-transform:uppercase;margin-bottom:12px;">How to Pay via M-Pesa</div>
-        <div style="display:flex;flex-direction:column;gap:8px;">
-          <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:#aaa;">
-            <span style="color:#FFD700;font-weight:700;min-width:18px;">1.</span>
-            <span>Go to <strong style="color:#fff;">M-Pesa</strong> → Lipa na M-Pesa → Buy Goods & Services</span>
-          </div>
-          <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:#aaa;">
-            <span style="color:#FFD700;font-weight:700;min-width:18px;">2.</span>
-            <span>Enter Till Number: <strong style="color:#FFD700;font-size:15px;letter-spacing:2px;">3171534</strong></span>
-          </div>
-          <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:#aaa;">
-            <span style="color:#FFD700;font-weight:700;min-width:18px;">3.</span>
-            <span>Enter amount: <strong style="color:#fff;">KSh 2,000</strong></span>
-          </div>
-          <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:#aaa;">
-            <span style="color:#FFD700;font-weight:700;min-width:18px;">4.</span>
-            <span>Enter your M-Pesa PIN and confirm</span>
-          </div>
-          <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:#aaa;">
-            <span style="color:#FFD700;font-weight:700;min-width:18px;">5.</span>
-            <span>Take a screenshot of the confirmation SMS and upload it below</span>
-          </div>
-        </div>
-      </div>
-
-      <button class="btn" onclick="handleSubmit()">
-        Proceed to Registration Form
+      <button class="btn" id="payBtn" onclick="handleSubmit()">
+        Register &amp; Pay via M-Pesa
       </button>
+
+      <div id="loadingMsg" style="display:none;text-align:center;margin-top:14px;font-size:13px;color:var(--gold);">
+        Sending M-Pesa prompt to your phone... ⏳
+      </div>
 
       <div class="secure-note">
         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <rect x="3" y="11" width="18" height="11" rx="2"/>
           <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
         </svg>
-        Secured · Slack invite sent once payment is confirmed
+        Secured · M-Pesa prompt sent instantly to your phone
       </div>
     </div>
 
     <div class="success-screen" id="successScreen">
       <div class="success-icon">✓</div>
-      <h3>Registration received!</h3>
-      <p>Thank you! Once your M-Pesa payment is verified your Slack invite will be sent to your email within minutes. Welcome to The Physics Lab! 🔥</p>
+      <h3>Check your phone!</h3>
+      <p>An M-Pesa payment prompt has been sent to your phone. Enter your PIN to complete payment. Your Slack invite will be sent to your email instantly after payment. Welcome to The Physics Lab! 🔥</p>
     </div>
   </div>
 
 </div>
 
 <script>
-function handleSubmit() {
+async function handleSubmit() {
   const name  = document.getElementById('name').value.trim();
   const phone = document.getElementById('phone').value.trim();
   const email = document.getElementById('email').value.trim();
+
   if (!name || !phone || !email) { alert('Please fill in all fields to continue.'); return; }
   if (!/^07\d{8}$/.test(phone)) { alert('Please enter a valid Safaricom number e.g. 0712345678'); return; }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { alert('Please enter a valid email address.'); return; }
-  window.open('https://docs.google.com/forms/d/e/1FAIpQLScK4PT3X-L5olSMxPbPAlMIhecRanmsSn_dwpkET9EIpfEhcg/viewform', '_blank');
-  document.getElementById('formWrap').style.display = 'none';
-  document.getElementById('successScreen').style.display = 'block';
+
+  const btn = document.getElementById('payBtn');
+  const loading = document.getElementById('loadingMsg');
+  btn.disabled = true;
+  btn.style.opacity = '0.6';
+  btn.textContent = 'Processing...';
+  loading.style.display = 'block';
+
+  try {
+    const response = await fetch('https://sandbox.intasend.com/api/v1/payment/mpesa-stk-push/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ISSecretKey_live_185c5e46-ebeb-4342-ae5a-8401a6c8301e'
+      },
+      body: JSON.stringify({
+        public_key: 'ISPubKey_live_0f800726-22df-43e2-a802-2743832120d7',
+        currency: 'KES',
+        amount: 2000,
+        phone_number: phone,
+        email: email,
+        narrative: 'Physics Lab Tuition - ' + name
+      })
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      document.getElementById('formWrap').style.display = 'none';
+      document.getElementById('successScreen').style.display = 'block';
+    } else {
+      alert('Payment failed: ' + (data.detail || 'Please try again.'));
+      btn.disabled = false;
+      btn.style.opacity = '1';
+      btn.textContent = 'Register & Pay via M-Pesa';
+      loading.style.display = 'none';
+    }
+  } catch(err) {
+    alert('Something went wrong. Please try again.');
+    btn.disabled = false;
+    btn.style.opacity = '1';
+    btn.textContent = 'Register & Pay via M-Pesa';
+    loading.style.display = 'none';
+  }
 }
 </script>
 
