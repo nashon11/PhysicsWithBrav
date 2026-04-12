@@ -2,6 +2,13 @@ exports.handler = async (event) => {
   const { name, phone, email } = JSON.parse(event.body);
   try {
     const invoice_id = 'PL' + Date.now();
+
+    await fetch('https://hook.eu1.make.com/jm0n974c1v2rxte6b418tihczdey3hep', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone, name, email, invoice_id })
+    });
+
     const response = await fetch('https://payment.intasend.com/api/v1/payment/mpesa-stk-push/', {
       method: 'POST',
       headers: {
@@ -16,9 +23,10 @@ exports.handler = async (event) => {
         email: email,
         first_name: name.split(' ')[0],
         last_name: name.split(' ')[1] || '',
-        narrative: invoice_id + '|' + name + '|' + email
+        narrative: invoice_id
       })
     });
+
     const data = await response.json();
     return {
       statusCode: response.ok ? 200 : 400,
